@@ -4,6 +4,16 @@ function getURLParameter(name) {
     return urlParams.get(name);
 }
 
+// Function to escape HTML to prevent XSS attacks
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 // Function to personalize the invitation message
 function personalizeInvitation() {
     const guestName = getURLParameter('name');
@@ -11,8 +21,9 @@ function personalizeInvitation() {
     
     if (guestName && invitationElement) {
         const decodedName = decodeURIComponent(guestName);
+        const safeName = escapeHtml(decodedName);
         invitationElement.innerHTML = `
-            <p><strong>${decodedName}</strong>, you are invited to</p>
+            <p><strong>${safeName}</strong>, you are invited to</p>
             <p>Rohan and Neha's Wedding!</p>
         `;
     }
